@@ -1,6 +1,6 @@
 {
   "name": "@acala-network/nuts-swap-adapter",
-  "version": "1.0.0",
+  "version": "1.1.1",
   "description": "nuts swap adapter for aggregate swap",
   "main": "dist/index.js",
   "repository": "git@github.com:AcalaNetwork/nuts-swap-adapter.git",
@@ -15,12 +15,6 @@
   "files": [
     "dist"
   ],
-  "resolutions": {
-    "@polkadot/api": "^10.7.3",
-    "@polkadot/types": "^10.7.3",
-    "@acala-network/sdk": "^4.1.9-2",
-    "@acala-network/sdk-core": "^4.1.9-2"
-  },
   "peerDependencies": {
     "@acala-network/sdk": "^4.1.9-2",
     "@acala-network/sdk-core": "^4.1.9-2",
@@ -31,7 +25,7 @@
     "@acala-network/sdk": "^4.1.9-2",
     "@acala-network/sdk-swap": "^4.1.9-2",
     "@acala-network/sdk-core": "^4.1.9-2",
-    "@nuts-finance/sdk-stable-asset": "^1.2.7",
+    "@acala-network/sdk-stable-asset": "^1.2.8",
     "@polkadot/api": "^10.7.3"
   },
   "devDependencies": {

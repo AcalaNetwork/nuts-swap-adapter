@@ -63,7 +63,7 @@
     "@ethersproject/transactions" "~5.7.0"
     "@ethersproject/wallet" "~5.7.0"
 
-"@acala-network/sdk-core@4.1.4-3", "@acala-network/sdk-core@4.1.9-2", "@acala-network/sdk-core@^4.1.9-2":
+"@acala-network/sdk-core@4.1.9-2", "@acala-network/sdk-core@^4.1.9-2":
   version "4.1.9-2"
   resolved "https://registry.yarnpkg.com/@acala-network/sdk-core/-/sdk-core-4.1.9-2.tgz#562fa6eeedd581a2ce6402032449086ce68e419a"
   integrity sha512-U1+0mFGWSx4fEg9sgsbwg4mYkJovaAt8d5doCR9YLk+PRil3k3Izt28IHN09IlUbNm7nlVWoQeYZp8TGQxj0/g==
@@ -72,6 +72,16 @@
     "@polkadot/api" "^10.7.3"
     bignumber.js "^9.0.0"
     lodash "^4.17.20"
+
+"@acala-network/sdk-stable-asset@^1.2.8":
+  version "1.2.8"
+  resolved "https://registry.yarnpkg.com/@acala-network/sdk-stable-asset/-/sdk-stable-asset-1.2.8.tgz#a26bcb501a0b2efa1dedb79b620abfbff5b62e50"
+  integrity sha512-gg/1VrD0MsoQb710+KFxEinLzNUfm/0FmW3SdNrwSyBNImuy/e+jZ+yOy3oAXeL8V5rnTPsQIV+r30c9he1YgQ==
+  dependencies:
+    axios "^0.27.2"
+    bignumber.js "^9.0.0"
+    lodash "^4.17.20"
+    rxjs "^7.4.0"
 
 "@acala-network/sdk-swap@^4.1.9-2":
   version "4.1.9-2"
@@ -84,7 +94,7 @@
     "@polkadot/api" "^10.7.3"
     rxjs "^7.8.1"
 
-"@acala-network/sdk@4.1.4-3", "@acala-network/sdk@^4.1.9-2":
+"@acala-network/sdk@^4.1.9-2":
   version "4.1.9-2"
   resolved "https://registry.yarnpkg.com/@acala-network/sdk/-/sdk-4.1.9-2.tgz#9b253a70d6b67f11620fc097dcd473926675ff96"
   integrity sha512-602xRk6Rig/vYwImw9knd+Qnfc73v9i+b0IUNFgYT4BElp4+N2Nb5BMJ+fPe749plpCeA3EuMwiGhg3FLiGlwA==
@@ -101,27 +111,10 @@
     lru-cache "^7.14.1"
     rxjs "^7.8.1"
 
-"@acala-network/type-definitions@4.1.4-3":
-  version "4.1.4-3"
-  resolved "https://registry.yarnpkg.com/@acala-network/type-definitions/-/type-definitions-4.1.4-3.tgz#cd79f13496ec9087ca44b35889efd4d702b66031"
-  integrity sha512-B9BSPC0Ultas21lQbmlzOcCTkzbo2mv6RtpYycG/ibcmzk58z4AoqCEVKFwevw1CLMdfwCmb97gnfC55J0s3GQ==
-  dependencies:
-    "@open-web3/orml-type-definitions" "^1.1.4"
-
 "@acala-network/type-definitions@5.1.1":
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/@acala-network/type-definitions/-/type-definitions-5.1.1.tgz#16c723f0561d9d54b4877bc51399c01a43490852"
   integrity sha512-QNhPwWePz/gFluSACKIhq0Z7rTntS21uIZUNpp9tsvc0zlJ20QjHJnv+ZfkdaKauFrL5upFfTgWqrLhN0jV0JQ==
-
-"@acala-network/types@4.1.4-3":
-  version "4.1.4-3"
-  resolved "https://registry.yarnpkg.com/@acala-network/types/-/types-4.1.4-3.tgz#b88f8ec14b9e6e17f879cec194d1a85f22deea59"
-  integrity sha512-Vu4RwQWF3fYbC+H3WxfFkVOHSkrSJG8r+2bEc8uKEDpyVLtbxZV6EJJymjzi94Jzscc8eXLxO3cQ1zWivCZxRw==
-  dependencies:
-    "@acala-network/type-definitions" "4.1.4-3"
-    "@babel/runtime" "^7.10.2"
-    "@open-web3/api-mobx" "^1.1.4"
-    "@open-web3/orml-types" "^1.1.4"
 
 "@acala-network/types@5.1.1", "@acala-network/types@^5.1.1":
   version "5.1.1"
@@ -130,13 +123,6 @@
   dependencies:
     "@acala-network/type-definitions" "5.1.1"
     "@open-web3/orml-types" "^2.0.1"
-
-"@babel/runtime@^7.10.2":
-  version "7.22.3"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.22.3.tgz#0a7fce51d43adbf0f7b517a71f4c3aaca92ebcbb"
-  integrity sha512-XsDuspWKLUsxwCp6r7EhsExHtYfbe5oAGQ19kqngTdCPUoPQzOPdUbD/pB9PJiwb2ptYKQDjSJT3R6dC+EPqfQ==
-  dependencies:
-    regenerator-runtime "^0.13.11"
 
 "@eslint-community/eslint-utils@^4.2.0":
   version "4.4.0"
@@ -564,29 +550,6 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@nuts-finance/sdk-stable-asset@^1.2.7":
-  version "1.2.7"
-  resolved "https://registry.yarnpkg.com/@nuts-finance/sdk-stable-asset/-/sdk-stable-asset-1.2.7.tgz#121babbe0dd0a221381c99c4aa322adaaa18552f"
-  integrity sha512-Z/THmfMLZdTdKRz7+WHAh3kgXpNhbHtqLHzXzavIrD5drTxBK1SMuaF3k5qmeW6P8Gvs2FDMYTzkZ6X6sVYxpw==
-  dependencies:
-    "@acala-network/sdk" "4.1.4-3"
-    "@acala-network/sdk-core" "4.1.4-3"
-    "@acala-network/types" "4.1.4-3"
-    "@polkadot/api" "^8.5.1"
-    "@polkadot/types" "^8.5.1"
-    axios "^0.27.2"
-    bignumber.js "^9.0.0"
-    lodash "^4.17.20"
-    rxjs "^7.4.0"
-
-"@open-web3/api-mobx@^1.1.4":
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/@open-web3/api-mobx/-/api-mobx-1.1.4.tgz#18a1327d373410797bfbbd94e9d61792d61f71e7"
-  integrity sha512-MheCFMiGp08i5ukMB8Dai6sNYEpX6UkuCobGIOZzON4K/Yj4mp9jUjzxZ24SCTtGLRwhI3qtUv3AyL06neObnw==
-  dependencies:
-    mobx "^5.15.7"
-    mobx-utils "^5.6.2"
-
 "@open-web3/orml-api-derive@^2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@open-web3/orml-api-derive/-/orml-api-derive-2.0.1.tgz#1f4fb448f409f8632ec93b3ee685cdc52ff10427"
@@ -595,26 +558,12 @@
     memoizee "^0.4.15"
     rxjs "^7.5.5"
 
-"@open-web3/orml-type-definitions@1.1.4", "@open-web3/orml-type-definitions@^1.1.4":
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/@open-web3/orml-type-definitions/-/orml-type-definitions-1.1.4.tgz#a036b6cf0410783aaedf7e95d27917a5d66c5bed"
-  integrity sha512-diuQx0Pf7cfoBtCpZTrBQOeIur0POp6Y9qfDS3p11RBF2XKwQ7jw/YKEFYqga1AyrzTcoSEE2OYUfeW3AKU94w==
-  dependencies:
-    lodash.merge "^4.6.2"
-
 "@open-web3/orml-type-definitions@2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@open-web3/orml-type-definitions/-/orml-type-definitions-2.0.1.tgz#b3db4fb5777dc05c55fa5184c34f4ec91030f012"
   integrity sha512-wqeSBOKk8UU9CBqYhK2yQh9YqwaS7vai71WuOGFNJnzRT+6WnzY0leaLTionuzfE3M4Y/jTrc8BTL6+PVFCr6Q==
   dependencies:
     lodash.merge "^4.6.2"
-
-"@open-web3/orml-types@^1.1.4":
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/@open-web3/orml-types/-/orml-types-1.1.4.tgz#cfd419907df5fa27d2feb3dc38391874e2608c5f"
-  integrity sha512-/JZocbeppn2hl9h2IAzjyqLW9c8hoWfAym45KpVUyp/Ho/Ykjw2n9Rn+s6yLVoga/oYfnP5gKwt5x4PMq24BUg==
-  dependencies:
-    "@open-web3/orml-type-definitions" "1.1.4"
 
 "@open-web3/orml-types@^2.0.1":
   version "2.0.1"
@@ -663,7 +612,7 @@
     rxjs "^7.8.1"
     tslib "^2.5.3"
 
-"@polkadot/api@10.8.1", "@polkadot/api@^10.7.3", "@polkadot/api@^8.5.1":
+"@polkadot/api@10.8.1", "@polkadot/api@^10.7.3":
   version "10.8.1"
   resolved "https://registry.yarnpkg.com/@polkadot/api/-/api-10.8.1.tgz#ecf4e8a7167d67ba1392ba0b93133c701e088280"
   integrity sha512-Txx1bXmB4FHghzPZ+OVQk6oYgPE03bhwMNiXzmC8Ia/tw5aoFnko2FFl+Y1pEhhMKDmqfyVe4L+HxPjfEQbsfA==
@@ -795,7 +744,7 @@
     "@polkadot/util" "^12.2.2"
     tslib "^2.5.3"
 
-"@polkadot/types@10.8.1", "@polkadot/types@^10.7.3", "@polkadot/types@^8.5.1":
+"@polkadot/types@10.8.1":
   version "10.8.1"
   resolved "https://registry.yarnpkg.com/@polkadot/types/-/types-10.8.1.tgz#83c01c347189ff97b98b34a5a4aba27c715539eb"
   integrity sha512-m6UvsvQOZ7sRGbonb6QLs4mZ6TmYKdAXAcHakiJl2xArqsgOghJsKhgaTqcigPkSq4947MXtIkEzdrwFEnkYkQ==
@@ -1922,16 +1871,6 @@ minimatch@^3.0.5, minimatch@^3.1.1, minimatch@^3.1.2:
   dependencies:
     brace-expansion "^1.1.7"
 
-mobx-utils@^5.6.2:
-  version "5.6.2"
-  resolved "https://registry.yarnpkg.com/mobx-utils/-/mobx-utils-5.6.2.tgz#4858acbdb03f0470e260854f87e8c2ba916ebaec"
-  integrity sha512-a/WlXyGkp6F12b01sTarENpxbmlRgPHFyR1Xv2bsSjQBm5dcOtd16ONb40/vOqck8L99NHpI+C9MXQ+SZ8f+yw==
-
-mobx@^5.15.7:
-  version "5.15.7"
-  resolved "https://registry.yarnpkg.com/mobx/-/mobx-5.15.7.tgz#b9a5f2b6251f5d96980d13c78e9b5d8d4ce22665"
-  integrity sha512-wyM3FghTkhmC+hQjyPGGFdpehrcX1KOXsDuERhfK2YbJemkUhEB+6wzEN639T21onxlfYBmriA1PFnvxTUhcKw==
-
 mock-socket@^9.2.1:
   version "9.2.1"
   resolved "https://registry.yarnpkg.com/mock-socket/-/mock-socket-9.2.1.tgz#cc9c0810aa4d0afe02d721dcb2b7e657c00e2282"
@@ -2077,11 +2016,6 @@ queue-microtask@^1.2.2:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/queue-microtask/-/queue-microtask-1.2.3.tgz#4929228bbc724dfac43e0efb058caf7b6cfb6243"
   integrity sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==
-
-regenerator-runtime@^0.13.11:
-  version "0.13.11"
-  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.11.tgz#f6dca3e7ceec20590d07ada785636a90cdca17f9"
-  integrity sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg==
 
 resolve-from@^4.0.0:
   version "4.0.0"
