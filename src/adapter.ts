@@ -1,7 +1,7 @@
 import { ApiRx } from '@polkadot/api';
 import { AnyApi, FixedPointNumber, forceToCurrencyName, Token } from '@acala-network/sdk-core';
 import { Wallet } from '@acala-network/sdk/wallet';
-import { StableAssetRx, PoolInfo, SwapInResult, SwapOutResult } from '@nuts-finance/sdk-stable-asset';
+import { StableAssetRx, PoolInfo, SwapInResult, SwapOutResult } from '@acala-network/sdk-stable-asset';
 import { NutsDexOnlySupportApiRx } from './errors';
 import { Observable, combineLatest, BehaviorSubject } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';

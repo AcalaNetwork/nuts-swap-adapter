@@ -1,6 +1,6 @@
 {
   "name": "@acala-network/nuts-swap-adapter",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "nuts swap adapter for aggregate swap",
   "main": "dist/index.js",
   "repository": "git@github.com:AcalaNetwork/nuts-swap-adapter.git",
