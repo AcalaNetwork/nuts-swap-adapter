@@ -1,13 +1,11 @@
-import { ApiRx } from '@polkadot/api';
 import { AnyApi, FixedPointNumber, forceToCurrencyName, Token } from '@acala-network/sdk-core';
-import { Wallet } from '@acala-network/sdk/wallet';
+import { Wallet } from '@acala-network/sdk';
 import { StableAssetRx, PoolInfo, SwapInResult, SwapOutResult } from '@acala-network/sdk-stable-asset';
 import { NutsDexOnlySupportApiRx } from './errors';
 import { Observable, combineLatest, BehaviorSubject } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import {
   AmountTooSmall, NoTradingPathError, ParamsNotAcceptableForDexProvider,
-
 } from '@acala-network/sdk-swap';
 import {
   BaseSwap,
@@ -16,11 +14,10 @@ import {
   SwapParamsWithExactPath,
   SwapResult,
   TradingPair,
-  TradingPathItem
+  TradingPath
 
-} from '@acala-network/sdk-swap/types'
-import { SubmittableExtrinsic } from '@polkadot/api/types/submittable';
-import { ISubmittableResult } from '@polkadot/types/types';
+} from '@acala-network/sdk-swap/dist/cjs/types'
+import { ObsInnerType, SubmittableExtrinsic } from '@polkadot/api/types';
 
 export interface NutsDexConfigs {
   api: AnyApi;
@@ -32,9 +29,10 @@ export class NutsDex implements BaseSwap {
   private api: AnyApi;
   private wallet: Wallet;
   private stableAsset: StableAssetRx;
-  public readonly tradingPairs$: Observable<TradingPair[]>;
   private availablePools$: BehaviorSubject<PoolInfo[]>;
-  private exchangeRate: FixedPointNumber;
+  private liquidToken: Token;
+  private exchangeRate!: FixedPointNumber;
+  public readonly tradingPairs$: Observable<TradingPair[]>;
 
   constructor({ api, wallet, stableAssets }: NutsDexConfigs) {
     this.api = api;
@@ -44,19 +42,22 @@ export class NutsDex implements BaseSwap {
       throw new NutsDexOnlySupportApiRx();
     }
 
-    this.stableAsset = stableAssets ?? new StableAssetRx(this.api as ApiRx);
+    this.stableAsset = stableAssets ?? new StableAssetRx(this.api as unknown as any, this.wallet);
     this.tradingPairs$ = this.initTradingPairs$();
     this.availablePools$ = new BehaviorSubject<PoolInfo[]>([]);
-    this.exchangeRate = FixedPointNumber.TEN;
+    this.liquidToken = wallet.getPresetTokens().liquidToken;
+
     this.updateExchangeRate();
   }
 
   private updateExchangeRate() {
-    this.wallet.homa.env$.subscribe({
-      next: (env) => {
-        this.exchangeRate = env.exchangeRate;
-      }
+    this.exchangeRate$.subscribe((exchangeRate) => {
+      this.exchangeRate = exchangeRate;
     });
+  }
+
+  get exchangeRate$(): Observable<FixedPointNumber> {
+    return this.wallet.homa.env$.pipe(map((env) => env.exchangeRate))
   }
 
   private initTradingPairs$() {
@@ -71,8 +72,8 @@ export class NutsDex implements BaseSwap {
           for (let i = 0; i < assets.length; i++) {
             for (let j = i + 1; j < assets.length; j++) {
               tradingPairs.push([
-                this.wallet.getToken(assets[i] as any),
-                this.wallet.getToken(assets[j] as any)
+                this.wallet.getToken(assets[i]),
+                this.wallet.getToken(assets[j])
               ] as TradingPair);
             }
           }
@@ -87,33 +88,43 @@ export class NutsDex implements BaseSwap {
     return 'nuts';
   }
 
-  public filterPath(path: TradingPathItem): boolean {
+  public filterPath(path: TradingPath): boolean {
     return path[1].length === 2;
   }
 
   private getPoolInfo(data: PoolInfo[], token0: Token, token1: Token) {
     const pool = data.find((item) => {
-      const assets = item.assets.map((i) => forceToCurrencyName(i as any));
+      const assets = item.assets.map((i) => forceToCurrencyName(i));
 
       return assets.indexOf(token0.name) !== -1 && assets.indexOf(token1.name) !== -1;
     });
 
     if (!pool) throw new NoTradingPathError();
 
-    const assets = pool.assets.map((i) => forceToCurrencyName(i as any));
+    const assets = pool.assets.map((i) => forceToCurrencyName(i));
+    const token0Index = assets.indexOf(token0.name);
+    const token1Index = assets.indexOf(token1.name);
+    const balance0 = FixedPointNumber._fromBN(pool.balances[token0Index], token0.decimal);
+    const balance1 = FixedPointNumber._fromBN(pool.balances[token1Index], token1.decimal);
 
     return {
       poolId: Number(pool.poolAsset.asStableAssetPoolToken.toString()),
       token0Index: assets.indexOf(token0.name),
-      token1Index: assets.indexOf(token1.name)
+      token1Index: assets.indexOf(token1.name),
+      token0Amount: pool.balances[assets.indexOf(token0.name)],
+      token1Amount: pool.balances[assets.indexOf(token0.name)],
+      balance0,
+      balance1,
     };
   }
 
   private subscribePoolInfo(token0: Token, token1: Token) {
-    return this.availablePools$.pipe(map((data) => this.getPoolInfo(data, token0, token1)));
+    return this.availablePools$.pipe(map((pool) => this.getPoolInfo(pool, token0, token1)));
   }
 
   private mapStableSwapResultToSwapResult(
+    ratio: FixedPointNumber,
+    pool: ObsInnerType<ReturnType<typeof NutsDex.prototype.subscribePoolInfo>>,
     params: SwapParamsWithExactPath,
     result: SwapInResult | SwapOutResult
   ): SwapResult {
@@ -133,6 +144,10 @@ export class NutsDex implements BaseSwap {
       if (Number(result.outputAmount.toNumber()) <= 0.001) throw new AmountTooSmall();
     }
 
+    const estimatedOutputAmount = ratio.mul(result.inputAmount);
+    const priceImpact = estimatedOutputAmount.minus(result.outputAmount).div(estimatedOutputAmount).abs();
+    const exchangeFeeRate = result.feeAmount.div(result.outputAmount);
+
     return {
       source: this.source,
       mode,
@@ -147,12 +162,10 @@ export class NutsDex implements BaseSwap {
       },
       // no midPrice in nuts pool
       midPrice: FixedPointNumber.ZERO,
-      // no priceImpact in nuts pool
-      priceImpact: FixedPointNumber.ZERO,
-      // no naturalPriceImpact in nuts pool
-      naturalPriceImpact: FixedPointNumber.ZERO,
+      priceImpact: priceImpact,
+      naturalPriceImpact: priceImpact.sub(exchangeFeeRate).max(FixedPointNumber.ZERO),
       exchangeFee: result.feeAmount,
-      exchangeFeeRate: result.feeAmount.div(result.outputAmount),
+      exchangeFeeRate, 
       acceptiveSlippage: params.acceptiveSlippage,
       callParams: result.toChainData()
     };
@@ -171,14 +184,22 @@ export class NutsDex implements BaseSwap {
         const { poolId, token0Index, token1Index } = pool;
 
         if (mode === 'EXACT_OUTPUT') {
-          return this.stableAsset
-            .getSwapInAmount(poolId, token0Index, token1Index, input, acceptiveSlippage || 0, exchangeRate)
-            .pipe(map((result) => this.mapStableSwapResultToSwapResult(params, result)));
+          return combineLatest({
+            result: this.stableAsset.getSwapInAmount(poolId, token0Index, token1Index, input, acceptiveSlippage || 0, exchangeRate),
+            estimated: this.stableAsset.getSwapInAmount(poolId, token0Index, token1Index, new FixedPointNumber(1, input.getPrecision()), 0, exchangeRate)
+          }).pipe(map(({ result, estimated }) => {
+            const ratio = estimated.outputAmount.div(estimated.inputAmount);
+            return this.mapStableSwapResultToSwapResult(ratio, pool, params, result)
+          }));
         }
 
-        return this.stableAsset
-          .getSwapOutAmount(poolId, token0Index, token1Index, input, acceptiveSlippage || 0, exchangeRate)
-          .pipe(map((result) => this.mapStableSwapResultToSwapResult(params, result)));
+        return combineLatest({
+          result: this.stableAsset.getSwapOutAmount(poolId, token0Index, token1Index, input, acceptiveSlippage || 0, exchangeRate),
+          estimated: this.stableAsset.getSwapOutAmount(poolId, token0Index, token1Index, new FixedPointNumber(1, input.getPrecision()), 0, exchangeRate)
+        }).pipe(map(({ result, estimated }) => {
+          const ratio = estimated.outputAmount.div(estimated.inputAmount);
+          return this.mapStableSwapResultToSwapResult(ratio, pool, params, result)
+        }));
       })
     );
   }
@@ -190,7 +211,7 @@ export class NutsDex implements BaseSwap {
   public getTradingTx(
     result: SwapResult,
     overwrite?: OverwriteCallParams
-  ): SubmittableExtrinsic<'promise', ISubmittableResult> | SubmittableExtrinsic<'rxjs', ISubmittableResult> {
+  ): SubmittableExtrinsic<'promise'> | SubmittableExtrinsic<'rxjs'> {
     const { path } = result;
     const [source] = path[0];
 

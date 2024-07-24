@@ -1,11 +1,11 @@
 {
   "name": "@acala-network/nuts-swap-adapter",
-  "version": "1.1.2",
+  "version": "1.1.5-4",
   "description": "nuts swap adapter for aggregate swap",
   "main": "dist/index.js",
   "repository": "git@github.com:AcalaNetwork/nuts-swap-adapter.git",
   "author": "qwer951123 <qiuhao951@gmail.com>",
-  "license": "Apache-2.0",
+  "license": "Apache-10.0",
   "scripts": {
     "build": "tsc --build"
   },
@@ -16,17 +16,17 @@
     "dist"
   ],
   "peerDependencies": {
-    "@acala-network/sdk": "^4.1.9-2",
-    "@acala-network/sdk-core": "^4.1.9-2",
-    "@acala-network/sdk-swap": "^4.1.9-2",
-    "@polkadot/api": "^10"
+    "@acala-network/sdk": "^4.1.10",
+    "@acala-network/sdk-core": "^4.1.10",
+    "@acala-network/sdk-swap": "^4.1.10",
+    "@polkadot/api": "^12"
   },
   "dependencies": {
-    "@acala-network/sdk": "^4.1.9-2",
-    "@acala-network/sdk-swap": "^4.1.9-2",
-    "@acala-network/sdk-core": "^4.1.9-2",
+    "@acala-network/sdk": "^4.1.10",
+    "@acala-network/sdk-swap": "^4.1.10",
+    "@acala-network/sdk-core": "^4.1.10",
     "@acala-network/sdk-stable-asset": "^1.2.8",
-    "@polkadot/api": "^10.7.3"
+    "@polkadot/api": "^12.1.1"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.59.9",
